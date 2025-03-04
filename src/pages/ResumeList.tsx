@@ -2,28 +2,16 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { RootState } from '../store';
-import { setResumes, deleteResume } from '../store/slices/resumeSlice';
+import { RootState, AppDispatch } from '../store';
+import { fetchResumes, deleteResume } from '../store/slices/resumeSlice';
+import { ResumeState } from '../types/resume';
 
 const ResumeList = () => {
-  const dispatch = useDispatch();
-  const { resumes, loading } = useSelector((state: RootState) => state.resume);
+  const dispatch = useDispatch<AppDispatch>();
+  const { resumes, loading } = useSelector((state: RootState) => state.resume as ResumeState);
 
   useEffect(() => {
-    const fetchResumes = async () => {
-      try {
-        // TODO: Implement actual API call
-        const response = await fetch('/api/resumes');
-        if (response.ok) {
-          const data = await response.json();
-          dispatch(setResumes(data.resumes));
-        }
-      } catch (error) {
-        console.error('Failed to fetch resumes:', error);
-      }
-    };
-
-    fetchResumes();
+    dispatch(fetchResumes());
   }, [dispatch]);
 
   const handleDelete = async (id: string) => {

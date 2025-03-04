@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { RootState } from '../store';
-import { setCurrentResume, addResume, updateResume } from '../store/slices/resumeSlice';
-import { Resume, Education, Experience, Skill } from '../types/resume';
+import { RootState, AppDispatch } from '../store';
+import { fetchResumeById, updateResume, createResume } from '../store/slices/resumeSlice';
+import { Resume, Education, Experience, Skill, ResumeState } from '../types/resume';
 
 const ResumeEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { currentResume, loading } = useSelector((state: RootState) => state.resume);
+  const dispatch = useDispatch<AppDispatch>();
+  const { currentResume, loading } = useSelector((state: RootState) => state.resume as ResumeState);
   const [formData, setFormData] = useState<Resume>({
     id: '',
     userId: '',
@@ -35,7 +35,7 @@ const ResumeEditor = () => {
           const response = await fetch(`/api/resumes/${id}`);
           if (response.ok) {
             const data = await response.json();
-            dispatch(setCurrentResume(data.resume));
+            dispatch(fetchResumeById(data.resume));
             setFormData(data.resume);
           }
         } catch (error) {
@@ -163,7 +163,7 @@ const ResumeEditor = () => {
         if (id) {
           dispatch(updateResume(data.resume));
         } else {
-          dispatch(addResume(data.resume));
+          dispatch(createResume(data.resume));
         }
         navigate('/resumes');
       }

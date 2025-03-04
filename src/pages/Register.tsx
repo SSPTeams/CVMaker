@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store/slices/authSlice';
+import { AppDispatch } from '../store';
+import { register as registerAction } from '../store/slices/authSlice';
 
 const Register = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -35,25 +36,11 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // TODO: Implement actual registration API call
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-
-      const data = await response.json();
-      dispatch(setUser(data.user));
+      await dispatch(registerAction({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      })).unwrap();
       navigate('/resumes');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
