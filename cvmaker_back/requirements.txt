@@ -13,4 +13,5 @@ black
 isort
 flake8
 dj-database-url
+psycopg2
 psycopg2-binary
