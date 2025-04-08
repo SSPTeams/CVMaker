@@ -16,3 +16,4 @@ dj-database-url
 psycopg2
 psycopg2-binary
 gunicorn
+django-storages
