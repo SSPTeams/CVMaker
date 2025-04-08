@@ -1,4 +1,4 @@
-import { resumeApi } from '../api/client';
+import { resumeApi } from '../api/resume.api';
 import { Resume } from '../types/resume';
 
 export class ResumeService {
@@ -10,7 +10,7 @@ export class ResumeService {
     return resumeApi.getById(id);
   }
 
-  static async create(data: Omit<Resume, 'id' | 'userId' | 'createdAt' | 'updatedAt'>): Promise<Resume> {
+  static async create(data: Omit<Resume, 'id' | 'created_at' | 'updated_at'>): Promise<Resume> {
     return resumeApi.create(data);
   }
 

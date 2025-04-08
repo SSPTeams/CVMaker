@@ -2,28 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { ResumeState, Resume } from '../../types/resume';
 import { ResumeService } from '../../services/resume.service';
 
-interface Education {
-  institution: string;
-  degree: string;
-  field: string;
-  startDate: string;
-  endDate: string;
-}
-
-interface Experience {
-  company: string;
-  position: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-}
-
-interface Skill {
-  name: string;
-  level: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
-}
-
 const initialState: ResumeState = {
   resumes: [],
   currentResume: null,
@@ -47,7 +25,7 @@ export const fetchResumeById = createAsyncThunk(
 
 export const createResume = createAsyncThunk(
   'resume/create',
-  async (data: Omit<Resume, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => {
+  async (data: Omit<Resume, 'id' | 'created_at' | 'updated_at'>) => {
     return await ResumeService.create(data);
   }
 );
@@ -152,8 +130,8 @@ const resumeSlice = createSlice({
       })
       .addCase(deleteResume.fulfilled, (state, action) => {
         state.loading = false;
-        state.resumes = state.resumes.filter(r => r.id !== action.payload);
-        if (state.currentResume?.id === action.payload) {
+        state.resumes = state.resumes.filter(r => r.id.toString() !== action.payload);
+        if (state.currentResume?.id.toString() === action.payload) {
           state.currentResume = null;
         }
       })

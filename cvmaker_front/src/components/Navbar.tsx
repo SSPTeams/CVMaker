@@ -5,13 +5,24 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { RootState } from '../store';
 import { logout } from '../store/slices/authSlice';
+import { AppDispatch } from '../store';
 
 const Navbar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
+  };
+
+  // Получаем инициал имени пользователя или значение по умолчанию
+  const getUserInitial = () => {
+    if (user) {
+      if (user.first_name) return user.first_name[0];
+      if (user.username) return user.username[0];
+      return 'U';
+    }
+    return 'U';
   };
 
   return (
@@ -48,7 +59,7 @@ const Navbar = () => {
                       <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
                         <span className="sr-only">Open user menu</span>
                         <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                          <span className="text-gray-600">{user?.name?.[0] || 'U'}</span>
+                          <span className="text-gray-600">{getUserInitial()}</span>
                         </div>
                       </Menu.Button>
                       <Transition
