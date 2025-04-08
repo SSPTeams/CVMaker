@@ -28,7 +28,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(',')
+CORS_ALLOWED_ORIGINS = ['*']
 CORS_ALLOW_CREDENTIALS = True
 
 # Email configuration
